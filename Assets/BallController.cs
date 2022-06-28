@@ -1,6 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BallController : MonoBehaviour
 {
@@ -28,6 +31,21 @@ public class BallController : MonoBehaviour
         }
 
         AutoNegativeMove();
+    }
+
+    private void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.CompareTag("endPoint"))
+        {
+            // todo 
+            print("도착~!");
+
+            GameObject.Find("Win_Text").GetComponent<Text>().color = Color.black;
+        }
+        else if (!col.gameObject.CompareTag("side"))
+        {
+            _rigidbody2D.AddForce(new Vector2(0f, 500f), ForceMode2D.Force);
+        }
     }
 
     void MoveHorizontal(float w)
