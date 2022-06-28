@@ -10,10 +10,10 @@ public class GameController : MonoBehaviour
 
     private float _reloadTime = 0.0f;
 
-    private float _timerTime = 10f;
     private Text _timerUIText;
 
-    private float _controlSpeed = 1f;
+    public float timerTime = 10f;
+    public float controlSpeed = 1f;
 
     void Start()
     {
@@ -23,26 +23,30 @@ public class GameController : MonoBehaviour
 
     void Update()
     {
-        _timerUIText.text = _timerTime.ToString("F2") + "s";
+        _timerUIText.text = timerTime.ToString("F2") + "s";
 
-        if (_timerTime == 0)
+        if (timerTime == 0)
         {
-            GameObject.Find("Win_Text").GetComponent<Text>().color = Color.black;
-            GameObject.Find("Win_Text").GetComponent<Text>().text = "blocker win!";
+            Text t = GameObject.Find("Win_Text").GetComponent<Text>();
+            if (t.color != Color.black)
+            {
+                t.color = Color.black;
+                t.text = "blocker win!";
+            }
         }
-        else if (_timerTime > 0)
+        else if (timerTime > 0)
         {
-            _timerTime -= Time.deltaTime;
+            timerTime -= Time.deltaTime;
         }
         else
         {
-            _timerTime = 0;
+            timerTime = 0;
         }
 
         if (_reloadTime > 0f)
         {
             _reloadTime += Time.deltaTime;
-            if (_reloadTime > 0.5f)
+            if (_reloadTime > (0.5f / controlSpeed))
             {
                 _reloadTime = 0;
                 _nowBlocker = createBlocker();
@@ -54,7 +58,7 @@ public class GameController : MonoBehaviour
             Vector2 nowPosition = _nowBlocker.transform.position;
             if (nowPosition.x >= -7.5)
             {
-                _nowBlocker.transform.position = new Vector2(nowPosition.x - (0.05f * _controlSpeed), nowPosition.y);
+                _nowBlocker.transform.position = new Vector2(nowPosition.x - (0.05f * controlSpeed), nowPosition.y);
             }
         }
 
@@ -63,7 +67,7 @@ public class GameController : MonoBehaviour
             Vector2 nowPosition = _nowBlocker.transform.position;
             if (nowPosition.x <= 7.5)
             {
-                _nowBlocker.transform.position = new Vector2(nowPosition.x + (0.05f * _controlSpeed), nowPosition.y);
+                _nowBlocker.transform.position = new Vector2(nowPosition.x + (0.05f * controlSpeed), nowPosition.y);
             }
         }
 
